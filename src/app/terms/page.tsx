@@ -1,0 +1,7 @@
+import { PageHero } from "@/components/PageHero";
+
+export const metadata = { title: "Terms and Conditions" };
+
+export default function TermsPage() {
+  return <><PageHero eyebrow="Legal" title="Terms and conditions" text="Conditions governing use of the PrimeCare website and online appointment-request service."/><section className="section"><article className="container legal-document"><h2>Online appointment requests</h2><p>Submitting the form requests a preferred date and time. An appointment is not final until the clinic changes its status to confirmed. Clinical emergencies should be handled by calling the emergency line.</p><h2>Medical information</h2><p>Website content is general information and does not replace diagnosis, examination, or treatment by a qualified clinician.</p><h2>Accuracy</h2><p>You are responsible for providing accurate contact and booking information. The clinic may cancel or reschedule requests where information is incomplete, availability changes, or clinical priorities require it.</p><h2>Acceptable use</h2><p>You must not misuse forms, attempt unauthorised access, submit fraudulent information, or interfere with the availability or security of the website.</p><h2>Changes</h2><p>These terms may be updated when services, legal requirements, or clinic procedures change. Continued use of the website indicates acceptance of the current terms.</p></article></section></>;
+}
