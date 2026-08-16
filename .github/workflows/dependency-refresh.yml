@@ -1,4 +1,4 @@
-name: Refresh Patched Next.js
+name: Refresh Patched Dependencies
 
 on:
   pull_request:
@@ -28,6 +28,9 @@ jobs:
       - name: Refresh patched framework lockfile
         run: npm install next@^16.2.11 eslint-config-next@^16.2.11 --package-lock-only
 
+      - name: Apply compatible audit fixes to lockfile
+        run: npm audit fix --package-lock-only
+
       - name: Verify production dependency audit
         run: npm audit --omit=dev --audit-level=high
 
@@ -40,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add package.json package-lock.json
-          git commit -m "fix: upgrade Next.js to patched release"
+          git commit -m "fix: upgrade vulnerable dependencies"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
