@@ -25,7 +25,9 @@ export function AppointmentManager({ initialToken = "" }: { initialToken?: strin
   }
 
   useEffect(() => {
-    if (initialToken) void request("POST", initialToken);
+    if (!initialToken) return;
+    const timer = window.setTimeout(() => void request("POST", initialToken), 0);
+    return () => window.clearTimeout(timer);
     // The secure token is read once from the server-rendered page query.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialToken]);

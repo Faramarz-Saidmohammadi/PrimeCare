@@ -34,7 +34,7 @@ export function AppointmentForm({ compact = false, initialDoctorSlug = "", initi
     consent: false,
   });
   const [form, setForm] = useState(makeInitial);
-  const [minDate, setMinDate] = useState("");
+  const [minDate, setMinDate] = useState(() => localDateString(new Date()));
   const [maxDate, setMaxDate] = useState("");
   const [doctors, setDoctors] = useState<DoctorOption[]>([]);
   const [slots, setSlots] = useState<Slot[]>([]);
@@ -43,7 +43,6 @@ export function AppointmentForm({ compact = false, initialDoctorSlug = "", initi
 
   useEffect(() => {
     const today = new Date();
-    setMinDate(localDateString(today));
     fetch("/api/appointments")
       .then((response) => response.json())
       .then((data) => {
@@ -60,12 +59,8 @@ export function AppointmentForm({ compact = false, initialDoctorSlug = "", initi
   }, []);
 
   useEffect(() => {
-    if (!form.date) {
-      setSlots([]);
-      return;
-    }
+    if (!form.date) return;
     const controller = new AbortController();
-    setAvailabilityLoading(true);
     fetch(`/api/appointments?date=${encodeURIComponent(form.date)}`, { signal: controller.signal })
       .then(async (response) => {
         const data = await response.json();
@@ -111,7 +106,7 @@ export function AppointmentForm({ compact = false, initialDoctorSlug = "", initi
       <label><span>Location</span><input autoComplete="address-level2" value={form.location} onChange={(event) => update("location", event.target.value)} placeholder="City or area"/></label>
       <label><span>Medical record</span><input value={form.medicalRecord} onChange={(event) => update("medicalRecord", event.target.value)} placeholder="Optional record number"/></label>
       <label><span>Preferred clinician</span><select value={form.doctorSlug} onChange={(event) => update("doctorSlug", event.target.value)}><option value="">Any available dentist</option>{doctors.map((doctor) => <option value={doctor.slug} key={doctor.slug}>{doctor.name}{doctor.role ? ` — ${doctor.role}` : ""}</option>)}</select></label>
-      <label><span>Preferred date *</span><input type="date" min={minDate} max={maxDate || undefined} required value={form.date} onChange={(event) => setForm((current) => ({ ...current, date: event.target.value, time: "" }))}/></label>
+      <label><span>Preferred date *</span><input type="date" min={minDate} max={maxDate || undefined} required value={form.date} onChange={(event) => { const date = event.target.value; setSlots([]); setAvailabilityLoading(Boolean(date)); setForm((current) => ({ ...current, date, time: "" })); }}/></label>
       <label><span>Preferred time *</span><select required disabled={!form.date || availabilityLoading} value={form.time} onChange={(event) => update("time", event.target.value)}><option value="">{availabilityLoading ? "Loading available times…" : form.date ? (availableSlots.length ? "Choose an available time" : "No times available") : "Choose a date first"}</option>{slots.map((slot) => <option key={slot.time} value={slot.time} disabled={!slot.available}>{slot.time}{slot.available ? ` — ${slot.remaining} left` : " — full"}</option>)}</select></label>
       <label><span>Reason for visit *</span><select required value={form.reason} onChange={(event) => update("reason", event.target.value)}>{appointmentReasons.map((reason) => <option key={reason}>{reason}</option>)}</select></label>
       <label className="full"><span>Additional details</span><textarea rows={compact ? 3 : 5} value={form.message} onChange={(event) => update("message", event.target.value)} placeholder="Tell us anything the clinic should know"/></label>
