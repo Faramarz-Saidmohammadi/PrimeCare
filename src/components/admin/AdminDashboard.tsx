@@ -2,6 +2,7 @@
 
 import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { escapeCsvCell } from "@/lib/csv";
 import type { ContentType, SiteSettings } from "@/types/admin";
 
 type Tab = "overview" | "appointments" | "messages" | "content" | "settings";
@@ -43,24 +44,8 @@ const emptySettings: SiteSettings = {
   social: { facebook: "", instagram: "", x: "", linkedin: "" },
 };
 
-async function api<T>(url: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(url, { ...options, headers: { "Content-Type": "application/json", ...(options?.headers || {}) } });
-  const data = await response.json().catch(() => ({}));
-  if (response.status === 401) {
-    window.location.href = "/admin/login";
-    throw new Error("Session expired");
-  }
-  if (!response.ok) throw new Error(data.error || "Request failed");
-  return data as T;
-}
-
 function value(item: Item, key: string) {
   return String(item[key] ?? "");
-}
-
-function csvEscape(input: unknown) {
-  const text = String(input ?? "");
-  return `"${text.replaceAll('"', '""')}"`;
 }
 
 export function AdminDashboard({ email }: { email: string }) {
@@ -82,6 +67,17 @@ export function AdminDashboard({ email }: { email: string }) {
   const [doctors, setDoctors] = useState<DoctorOption[]>([]);
   const [settings, setSettings] = useState<SiteSettings>(emptySettings);
 
+  const api = useCallback(async <T,>(url: string, options?: RequestInit): Promise<T> => {
+    const response = await fetch(url, { ...options, headers: { "Content-Type": "application/json", ...(options?.headers || {}) } });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401) {
+      router.replace("/admin/login");
+      throw new Error("Session expired");
+    }
+    if (!response.ok) throw new Error(data.error || "Request failed");
+    return data as T;
+  }, [router]);
+
   const showNotice = useCallback((text: string, type: "success" | "error" | "info" = "info") => {
     setNotice({ text, type });
     window.setTimeout(() => setNotice(null), 5500);
@@ -95,7 +91,7 @@ export function AdminDashboard({ email }: { email: string }) {
     } catch (error) {
       showNotice(error instanceof Error ? error.message : "Unable to load dashboard statistics", "error");
     }
-  }, [showNotice]);
+  }, [api, showNotice]);
 
   const loadDoctors = useCallback(async () => {
     try {
@@ -104,7 +100,7 @@ export function AdminDashboard({ email }: { email: string }) {
     } catch {
       setDoctors([]);
     }
-  }, []);
+  }, [api]);
 
   const loadSettings = useCallback(async () => {
     setLoading(true);
@@ -116,7 +112,7 @@ export function AdminDashboard({ email }: { email: string }) {
     } finally {
       setLoading(false);
     }
-  }, [showNotice]);
+  }, [api, showNotice]);
 
   const load = useCallback(async () => {
     if (tab === "overview") return;
@@ -145,14 +141,16 @@ export function AdminDashboard({ email }: { email: string }) {
     } finally {
       setLoading(false);
     }
-  }, [tab, contentType, page, search, statusFilter, loadSettings, showNotice]);
+  }, [api, tab, contentType, page, search, statusFilter, loadSettings, showNotice]);
 
-  useEffect(() => { void loadStats(); void loadDoctors(); }, [loadStats, loadDoctors]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void loadStats(); void loadDoctors(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [loadStats, loadDoctors]);
   useEffect(() => {
     const timer = window.setTimeout(() => void load(), 220);
     return () => window.clearTimeout(timer);
   }, [load]);
-  useEffect(() => { setPage(1); }, [tab, search, statusFilter, contentType]);
 
   const title = useMemo(() => ({
     overview: "Dashboard overview",
@@ -311,8 +309,8 @@ export function AdminDashboard({ email }: { email: string }) {
         current += 1;
       } while (current <= maxPages);
       const headers = ["Reference", "Name", "Email", "Phone", "Date", "Time", "Reason", "Doctor", "Status", "Notes", "Created"];
-      const rows = all.map((item) => [item.reference, item.name, item.email, item.phone, item.date, item.time, item.reason, item.doctorName, item.status, item.internalNotes, item.createdAt].map(csvEscape).join(","));
-      const blob = new Blob([[headers.map(csvEscape).join(","), ...rows].join("\n")], { type: "text/csv;charset=utf-8" });
+      const rows = all.map((item) => [item.reference, item.name, item.email, item.phone, item.date, item.time, item.reason, item.doctorName, item.status, item.internalNotes, item.createdAt].map(escapeCsvCell).join(","));
+      const blob = new Blob([[headers.map(escapeCsvCell).join(","), ...rows].join("\n")], { type: "text/csv;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -364,8 +362,8 @@ export function AdminDashboard({ email }: { email: string }) {
 
         {(tab === "appointments" || tab === "messages") ? (
           <div className="admin-toolbar">
-            <label><span>Search</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={tab === "appointments" ? "Reference, patient, email or phone" : "Sender, subject or message"}/></label>
-            <label><span>Status</span><select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option value="">All statuses</option>{(tab === "appointments" ? ["pending", "confirmed", "completed", "cancelled"] : ["new", "read", "resolved"]).map((status) => <option key={status} value={status}>{status}</option>)}</select></label>
+            <label><span>Search</span><input value={search} onChange={(event) => { setPage(1); setSearch(event.target.value); }} placeholder={tab === "appointments" ? "Reference, patient, email or phone" : "Sender, subject or message"}/></label>
+            <label><span>Status</span><select value={statusFilter} onChange={(event) => { setPage(1); setStatusFilter(event.target.value); }}><option value="">All statuses</option>{(tab === "appointments" ? ["pending", "confirmed", "completed", "cancelled"] : ["new", "read", "resolved"]).map((status) => <option key={status} value={status}>{status}</option>)}</select></label>
             <span className="admin-total">{total} record{total === 1 ? "" : "s"}</span>
           </div>
         ) : null}
@@ -373,7 +371,7 @@ export function AdminDashboard({ email }: { email: string }) {
         {tab === "content" ? (
           <>
             <div className="content-tabs">
-              {(["service", "doctor", "post"] as ContentType[]).map((type) => <button className={contentType === type ? "active" : ""} onClick={() => { setContentType(type); setContentId(null); setContentForm({ ...emptyContent, type }); }} key={type}>{type}s</button>)}
+              {(["service", "doctor", "post"] as ContentType[]).map((type) => <button className={contentType === type ? "active" : ""} onClick={() => { setPage(1); setContentType(type); setContentId(null); setContentForm({ ...emptyContent, type }); }} key={type}>{type}s</button>)}
             </div>
             <form className="content-form" onSubmit={saveContent}>
               <div className="content-form-heading"><h2>{contentId ? `Edit ${contentType}` : `Add ${contentType}`}</h2>{contentId ? <button type="button" className="admin-refresh" onClick={() => editContent()}>Cancel edit</button> : null}</div>

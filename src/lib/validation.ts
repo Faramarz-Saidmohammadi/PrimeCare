@@ -16,7 +16,7 @@ function isSafeExternalUrl(value: string) {
 }
 
 function isSafeImagePath(value: string) {
-  return !value || value.startsWith("/") || isSafeExternalUrl(value);
+  return !value || (value.startsWith("/") && !value.startsWith("//")) || isSafeExternalUrl(value);
 }
 
 export function validatePatientIdentity(input: { name: unknown; email: unknown; phone: unknown }) {

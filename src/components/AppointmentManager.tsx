@@ -45,7 +45,7 @@ export function AppointmentManager({ initialToken = "" }: { initialToken?: strin
   return (
     <div className="appointment-manager">
       <form onSubmit={lookup} className="appointment-lookup-form">
-        <label><span>Appointment reference</span><input required value={credentials.reference} onChange={(event) => setCredentials({ ...credentials, reference: event.target.value.toUpperCase() })} placeholder="PC-260806-ABC123"/></label>
+        <label><span>Appointment reference</span><input required value={credentials.reference} onChange={(event) => setCredentials({ ...credentials, reference: event.target.value.toUpperCase() })} placeholder="PC-260806-ABC123DEF4567890"/></label>
         <label><span>Email used for booking</span><input type="email" required value={credentials.email} onChange={(event) => setCredentials({ ...credentials, email: event.target.value })} placeholder="name@example.com"/></label>
         <button className="button" disabled={state.loading}>{state.loading ? "Checking…" : "Check appointment"}</button>
       </form>

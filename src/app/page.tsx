@@ -1,7 +1,6 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import Link from "next/link";
-import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { AppointmentForm } from "@/components/AppointmentForm";
 import { FaqAccordion } from "@/components/FaqAccordion";
 import { Icon } from "@/components/Icon";
@@ -52,7 +51,7 @@ export default async function HomePage() {
 
           <div className="pc-hero-support-row">
             <Reveal className="pc-hero-intro" delay={120}>
-              <p>Experience top-quality dental care focused on your smile&apos;s health and beauty. Trust us to create a brighter, healthier tomorrow.</p>
+              <p>Explore patient-focused dental services, request an appointment online, and receive clear information before your visit.</p>
               <div className="pc-hero-actions">
                 <Link className="pc-btn pc-btn-light" href="/appointment">Book Now <Icon name="arrow" size={18}/></Link>
                 <Link className="pc-circle-link" href="/contact" aria-label="Enquiries"><Icon name="arrow" size={22}/></Link>
@@ -61,18 +60,18 @@ export default async function HomePage() {
             </Reveal>
 
             <Reveal className="pc-hero-stats" delay={220} direction="right">
-              <div><strong>0<em>7</em></strong><span>Emergency Service</span></div>
-              <div><strong><AnimatedCounter value={8} suffix="k" /></strong><span>Recovered Patients</span></div>
-              <div><strong><AnimatedCounter value={15} suffix="+" /></strong><span>Market Experience</span></div>
+              <div><strong>01</strong><span>Request online</span></div>
+              <div><strong>02</strong><span>Receive confirmation</span></div>
+              <div><strong>03</strong><span>Attend your visit</span></div>
             </Reveal>
           </div>
 
           <Reveal className="pc-hero-media" delay={280} direction="zoom">
             <Image src={images.hero} alt="Dentist providing professional dental care" fill priority sizes="(max-width: 900px) 100vw, 1200px" />
             <div className="pc-rating-card">
-              <div className="pc-stars">★★★★★</div>
-              <strong>Best Service &amp; 5 Star</strong>
-              <span>Hospital are crucial institutions in our society</span>
+              <div className="pc-stars">PATIENT FIRST</div>
+              <strong>Clear, coordinated care</strong>
+              <span>Understand your options before treatment begins.</span>
             </div>
             <div className="pc-hero-play" aria-hidden="true"><span>▶</span></div>
           </Reveal>
@@ -82,7 +81,7 @@ export default async function HomePage() {
       <section className="pc-contact-strip">
         <div className="container pc-contact-strip-grid">
           <Reveal delay={40}><div className="pc-strip-item"><span><Icon name="phone"/></span><div><small>Need Dental Services?</small><strong>{settings.phone}</strong></div></div></Reveal>
-          <Reveal delay={120}><div className="pc-strip-item"><span><Icon name="clock"/></span><div><small>Opening Hours</small><strong>Mon to Sat 9:00AM to 9:00PM</strong></div></div></Reveal>
+          <Reveal delay={120}><div className="pc-strip-item"><span><Icon name="clock"/></span><div><small>Opening Hours</small><strong>{settings.hours[0] || "Contact the clinic for current hours"}</strong></div></div></Reveal>
           <Reveal delay={200}><div className="pc-strip-item pc-strip-action"><div><small>Ready for a healthier smile?</small><strong>Make An Appointment</strong></div><Link href="/appointment"><Icon name="arrow"/></Link></div></Reveal>
         </div>
       </section>
@@ -91,20 +90,20 @@ export default async function HomePage() {
         <div className="container pc-about-grid">
           <Reveal className="pc-about-media" direction="left">
             <div className="pc-about-photo"><Image src={images.about} alt="PrimeCare dental clinic interior" fill sizes="(max-width: 900px) 100vw, 50vw" /></div>
-            <div className="pc-experience-badge"><strong><AnimatedCounter value={25} suffix="+" /></strong><span>experience in medical services</span></div>
-            <div className="pc-founder-card"><div className="pc-founder-avatar">DR</div><div><strong>Dianne Russell</strong><span>Co founder</span></div></div>
+            <div className="pc-experience-badge"><strong>Care</strong><span>planned around each patient</span></div>
+            <div className="pc-founder-card"><div className="pc-founder-avatar">PC</div><div><strong>Clinical team</strong><span>Coordinated treatment planning</span></div></div>
           </Reveal>
           <Reveal className="pc-about-copy" direction="right">
             <span className="pc-kicker">About Us</span>
             <h2>Commitment to your smile&apos;s health and beauty</h2>
-            <p>The goal of our clinic is to provide friendly, caring dentistry and the highest level of general, cosmetic, and specialist dental treatments. With dental practices throughout the world.</p>
+            <p>PrimeCare brings preventive, restorative, cosmetic, orthodontic, paediatric, and urgent dental services into one coordinated patient journey.</p>
             <div className="pc-progress-row">
-              <div className="pc-circle-progress" style={{ "--value": "92%" } as CSSProperties}><span>92%</span></div>
-              <strong>Invisalign Treatment Complete</strong>
+              <div className="pc-circle-progress" style={{ "--value": "100%" } as CSSProperties}><span>01</span></div>
+              <strong>Clear treatment explanations</strong>
             </div>
             <div className="pc-progress-row">
-              <div className="pc-circle-progress" style={{ "--value": "98%" } as CSSProperties}><span>98%</span></div>
-              <strong>Patient Satisfaction Rate</strong>
+              <div className="pc-circle-progress" style={{ "--value": "100%" } as CSSProperties}><span>02</span></div>
+              <strong>Prevention-led planning</strong>
             </div>
             <Link className="pc-btn" href="/about">More About <Icon name="arrow" size={18}/></Link>
           </Reveal>
@@ -131,7 +130,7 @@ export default async function HomePage() {
                   <div className="pc-service-content">
                     <div className="pc-service-icon"><Icon name={index === 1 ? "sparkle" : "tooth"} size={28}/></div>
                     <h3><Link href={`/services/${service.slug}`}>{service.title}</Link></h3>
-                    <p>We are excited to meet you and provide the best dental care for your family.</p>
+                    <p>Learn what the service includes and when a clinical assessment may be appropriate.</p>
                     <Link href={`/services/${service.slug}`} className="pc-read-link">Learn More <Icon name="arrow" size={17}/></Link>
                   </div>
                 </article>
@@ -146,7 +145,7 @@ export default async function HomePage() {
           <Reveal className="pc-expertise-copy" direction="left">
             <span className="pc-kicker pc-kicker-light">Expertise</span>
             <h2>Commitment to your oral health and smile aesthetics</h2>
-            <p>A specialist doctor is available for any need. We are available in 150+ locations with modern facilities and experienced doctors.</p>
+            <p>Care pathways are organised around assessment, appropriate referral, informed consent, and practical follow-up.</p>
             <div className="pc-expertise-list">
               <div><span>01</span><div><strong>The needs of our patients always come first</strong><p>Every treatment plan begins with your goals, comfort and long-term oral health.</p></div></div>
               <div><span>02</span><div><strong>Modern facilities and experienced doctors</strong><p>Advanced diagnostics support precise, predictable and comfortable care.</p></div></div>
@@ -155,7 +154,7 @@ export default async function HomePage() {
           <div className="pc-expertise-collage">
             <Reveal className="pc-expertise-photo pc-expertise-photo-one" direction="zoom"><Image src={images.expertiseOne} alt="Dentist discussing treatment" fill sizes="40vw" /></Reveal>
             <Reveal className="pc-expertise-photo pc-expertise-photo-two" delay={180} direction="zoom"><Image src={images.expertiseTwo} alt="Dental team in treatment room" fill sizes="36vw" /></Reveal>
-            <div className="pc-expert-count"><strong><AnimatedCounter value={18} suffix="+" /></strong><span>Expert Doctor</span></div>
+            <div className="pc-expert-count"><strong>Team</strong><span>Coordinated care</span></div>
           </div>
         </div>
       </section>
@@ -170,7 +169,7 @@ export default async function HomePage() {
           <div className="pc-why-layout">
             <div className="pc-why-list pc-why-list-left">
               <Reveal direction="left"><div className="pc-why-card"><span><Icon name="phone"/></span><div><h3>Emergency Services</h3><p>The goal of our clinic is to provide friendly, caring dentistry.</p></div></div></Reveal>
-              <Reveal delay={120} direction="left"><div className="pc-why-card"><span><Icon name="sparkle"/></span><div><h3>Positive Patient Reviews</h3><p>Patients value our clear communication and careful treatment.</p></div></div></Reveal>
+              <Reveal delay={120} direction="left"><div className="pc-why-card"><span><Icon name="sparkle"/></span><div><h3>Clear Communication</h3><p>Treatment options, limitations, and next steps are explained in plain language.</p></div></div></Reveal>
             </div>
             <Reveal className="pc-doctor-cutout" direction="zoom"><Image src={images.doctor} alt="Experienced dental professional" fill sizes="(max-width: 900px) 80vw, 32vw" /></Reveal>
             <div className="pc-why-list">
@@ -185,7 +184,7 @@ export default async function HomePage() {
       <section className="pc-section pc-process">
         <div className="container">
           <Reveal className="pc-centered-heading">
-            <span className="pc-kicker">How It Work</span>
+            <span className="pc-kicker">How It Works</span>
             <h2>Understanding the patient journey</h2>
           </Reveal>
           <div className="pc-process-grid">
@@ -205,8 +204,8 @@ export default async function HomePage() {
       <section className="pc-section pc-testimonials">
         <div className="container pc-testimonial-grid">
           <Reveal direction="left">
-            <span className="pc-kicker pc-kicker-light">Testimonial</span>
-            <h2>Real stories of exceptional care and transformative smiles</h2>
+            <span className="pc-kicker pc-kicker-light">Care Standards</span>
+            <h2>What patients should expect at every appointment</h2>
             <Link className="pc-btn pc-btn-light" href="/contact">Contact Us Now <Icon name="arrow" size={18}/></Link>
           </Reveal>
           <Reveal delay={160} direction="right"><Testimonials/></Reveal>
@@ -216,13 +215,13 @@ export default async function HomePage() {
       <section className="pc-section pc-transform">
         <div className="container">
           <div className="pc-heading-row">
-            <Reveal><span className="pc-kicker">See The Transformation</span><h2>Stunning results that showcase the life changing impact</h2></Reveal>
-            <Reveal delay={140} direction="right"><Link className="pc-btn pc-btn-outline" href="/gallery">Contact Now <Icon name="arrow" size={18}/></Link></Reveal>
+            <Reveal><span className="pc-kicker">Treatment Pathways</span><h2>From assessment to treatment and ongoing care</h2></Reveal>
+            <Reveal delay={140} direction="right"><Link className="pc-btn pc-btn-outline" href="/services">View Services <Icon name="arrow" size={18}/></Link></Reveal>
           </div>
           <div className="pc-transform-grid">
-            <Reveal className="pc-transform-card pc-transform-large" direction="zoom"><Image src={images.transformOne} alt="Smiling dental patient" fill sizes="60vw" /><span>Smile Makeover</span></Reveal>
-            <Reveal className="pc-transform-card" delay={100} direction="zoom"><Image src={images.transformTwo} alt="Dental care result" fill sizes="35vw" /><span>Cosmetic Care</span></Reveal>
-            <Reveal className="pc-transform-card" delay={180} direction="zoom"><Image src={images.serviceTwo} alt="Professional dental treatment" fill sizes="35vw" /><span>Restorative Care</span></Reveal>
+            <Reveal className="pc-transform-card pc-transform-large" direction="zoom"><Image src={images.transformOne} alt="Patient consultation" fill sizes="60vw" /><span>Clinical Assessment</span></Reveal>
+            <Reveal className="pc-transform-card" delay={100} direction="zoom"><Image src={images.transformTwo} alt="Dental treatment planning" fill sizes="35vw" /><span>Treatment Planning</span></Reveal>
+            <Reveal className="pc-transform-card" delay={180} direction="zoom"><Image src={images.serviceTwo} alt="Dental follow-up care" fill sizes="35vw" /><span>Follow-Up Care</span></Reveal>
           </div>
         </div>
       </section>
@@ -231,7 +230,7 @@ export default async function HomePage() {
         <div className="container pc-faq-grid">
           <Reveal className="pc-faq-media" direction="left">
             <Image src={images.faq} alt="Dentist performing a careful examination" fill sizes="(max-width: 900px) 100vw, 45vw" />
-            <div className="pc-emergency-bubble"><span>We always take care of your smile</span><strong>24/7 Emergency</strong><a href={`tel:${settings.emergency}`}>{settings.emergency}</a></div>
+            <div className="pc-emergency-bubble"><span>For urgent dental concerns</span><strong>Call before visiting</strong><a href={`tel:${settings.emergency}`}>{settings.emergency}</a></div>
           </Reveal>
           <Reveal direction="right">
             <span className="pc-kicker">Faqs</span>
@@ -245,8 +244,8 @@ export default async function HomePage() {
       <section className="pc-section pc-news">
         <div className="container">
           <div className="pc-heading-row">
-            <Reveal><span className="pc-kicker">Latest News</span><h2>Latest dental news insights and oral health advice</h2></Reveal>
-            <Reveal delay={120} direction="right"><Link className="pc-btn pc-btn-outline" href="/blog">View All Post <Icon name="arrow" size={18}/></Link></Reveal>
+            <Reveal><span className="pc-kicker">Dental Resources</span><h2>Practical information for informed oral-health decisions</h2></Reveal>
+            <Reveal delay={120} direction="right"><Link className="pc-btn pc-btn-outline" href="/blog">View All Posts <Icon name="arrow" size={18}/></Link></Reveal>
           </div>
           <div className="pc-news-grid">
             {posts.slice(0, 2).map((post, index) => (
@@ -268,7 +267,7 @@ export default async function HomePage() {
             <h2>Book your dental visit online with PrimeCare</h2>
             <p>Ready to take the next step towards a healthier smile? Use our easy online booking system to schedule your dental appointment.</p>
             <div className="pc-working-hours"><h3>Working Hours</h3>{settings.hours.map((hour) => <span key={hour}><Icon name="clock" size={18}/>{hour}</span>)}</div>
-            <div className="pc-booking-emergency"><Icon name="phone"/><div><span>24/7 Emergency</span><strong>{settings.emergency}</strong></div></div>
+            <div className="pc-booking-emergency"><Icon name="phone"/><div><span>Urgent enquiries</span><strong>{settings.emergency}</strong></div></div>
           </Reveal>
           <Reveal className="pc-booking-form" delay={150} direction="right">
             <p>Fill out the form below to request your dental appointment. We&apos;ll confirm your time and send you a reminder.</p>

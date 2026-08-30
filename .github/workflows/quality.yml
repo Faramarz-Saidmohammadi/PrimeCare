@@ -15,9 +15,9 @@ concurrency:
 
 jobs:
   quality:
-    name: Typecheck, lint, audit and build
+    name: Typecheck, lint, test, audit and build
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       - name: Checkout repository
@@ -46,3 +46,26 @@ jobs:
           APPOINTMENT_SLOT_CAPACITY: 2
           APPOINTMENT_HORIZON_DAYS: 180
           CRON_SECRET: ci-placeholder-cron-secret-that-is-long-enough-for-validation
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser workflow tests
+        run: npm run test:e2e
+        env:
+          ADMIN_EMAIL: admin@primecare.test
+          ADMIN_PASSWORD: ci-placeholder-password
+          AUTH_SECRET: ci-placeholder-secret-that-is-longer-than-sixty-four-characters-for-safety
+          NEXT_PUBLIC_SITE_URL: http://127.0.0.1:3000
+          CLINIC_TIME_ZONE: UTC
+          APPOINTMENT_SLOT_CAPACITY: 2
+          APPOINTMENT_HORIZON_DAYS: 180
+          CRON_SECRET: ci-placeholder-cron-secret-that-is-long-enough-for-validation
+
+      - name: Upload browser report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report
+          if-no-files-found: ignore

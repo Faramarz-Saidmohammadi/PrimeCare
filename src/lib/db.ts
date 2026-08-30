@@ -5,9 +5,21 @@ const globalForMongoose = globalThis as typeof globalThis & { mongooseCache?: Ca
 const cached = globalForMongoose.mongooseCache ?? { connection: null, promise: null };
 globalForMongoose.mongooseCache = cached;
 
+export class DatabaseConfigurationError extends Error {
+  readonly code = "DATABASE_NOT_CONFIGURED";
+
+  constructor() {
+    super("MONGODB_URI is required in production");
+    this.name = "DatabaseConfigurationError";
+  }
+}
+
 export async function dbConnect(): Promise<typeof mongoose | null> {
   const uri = process.env.MONGODB_URI?.trim();
-  if (!uri) return null;
+  if (!uri) {
+    if (process.env.NODE_ENV === "production") throw new DatabaseConfigurationError();
+    return null;
+  }
   if (cached.connection) return cached.connection;
   if (!cached.promise) {
     cached.promise = mongoose.connect(uri, {

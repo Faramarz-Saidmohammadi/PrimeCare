@@ -21,7 +21,7 @@ The interface is implemented in original application code. Third-party commercia
 - Atomic MongoDB reservation logic to protect against concurrent overbooking
 - Optional clinician selection
 - Patient details, visit reason, notes, consent, and spam protection
-- Unique appointment reference and secure cancellation token
+- 64-bit random appointment reference and secure cancellation token
 - Patient appointment lookup and self-cancellation
 - Status lifecycle: `pending → confirmed → completed/cancelled`
 - Administrative phone/walk-in booking and rescheduling with availability revalidation
@@ -49,7 +49,7 @@ The interface is implemented in original application code. Third-party commercia
 | Persistence | MongoDB, Mongoose |
 | Email | Resend-compatible delivery integration |
 | Scheduling | Vercel Cron |
-| Quality | TypeScript, ESLint, production build validation, GitHub Actions |
+| Quality | TypeScript, ESLint, Vitest, Playwright, production builds, GitHub Actions |
 
 ## Operational design
 
@@ -115,9 +115,14 @@ Run before merge:
 
 ```bash
 npm run check
+npm run test:e2e
 ```
 
-`npm run check` performs TypeScript validation, ESLint, and a production Next.js build. GitHub Actions runs the same repository quality gate for pull requests and updates to `main`.
+`npm run check` performs TypeScript validation, ESLint, 24 unit and security tests, and a production Next.js build. `npm run test:e2e` exercises the public booking journey and administrator authentication with desktop and mobile Chromium profiles.
+
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` in the command environment before running the browser suite. The tests intentionally contain no fallback administrator credentials.
+
+GitHub Actions performs a clean dependency installation, production dependency audit, the full quality gate, and all six browser scenarios for pull requests and updates to `main`.
 
 Changes affecting appointments, persistence, authentication, email, or scheduled reminders should also be exercised against the relevant non-production service dependency.
 
@@ -125,6 +130,7 @@ Changes affecting appointments, persistence, authentication, email, or scheduled
 
 - **Persistent mode:** configure `MONGODB_URI`; data is stored in MongoDB and booking constraints are enforced through the persistent data model.
 - **Development fallback:** omit `MONGODB_URI`; data is process-local and may reset after restart or serverless cold start. This mode is not suitable for a live clinic.
+- **Production safety:** production requests fail with a service error when `MONGODB_URI` is missing. Patient and administrative data are never silently accepted into temporary memory in production.
 
 ## Deployment
 
@@ -133,11 +139,12 @@ The intended production target is Vercel with MongoDB Atlas and optional Resend 
 Before production release:
 
 1. configure all environment variables in the deployment platform;
-2. set `NEXT_PUBLIC_SITE_URL` to the production origin;
-3. verify `/api/health`;
-4. test appointment creation, lookup, cancellation, and rescheduling;
-5. test admin authentication and content-management workflows;
-6. verify reminder processing and email delivery when enabled.
+2. replace placeholder clinic contact details and role-based team profiles with verified information;
+3. set `NEXT_PUBLIC_SITE_URL` to the production origin;
+4. verify `/api/health` reports the database as connected;
+5. test appointment creation, lookup, cancellation, and rescheduling;
+6. test admin authentication and content-management workflows;
+7. verify reminder processing and email delivery when enabled.
 
 `vercel.json` contains the scheduled reminder configuration.
 
