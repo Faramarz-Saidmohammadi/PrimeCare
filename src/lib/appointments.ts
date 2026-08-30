@@ -65,7 +65,7 @@ export function validateDateAndTime(dateValue: string, timeValue: string) {
 
 export function generateReference() {
   const date = new Date().toISOString().slice(2, 10).replaceAll("-", "");
-  return `PC-${date}-${crypto.randomBytes(3).toString("hex").toUpperCase()}`;
+  return `PC-${date}-${crypto.randomBytes(8).toString("hex").toUpperCase()}`;
 }
 
 export function generateCancelToken() {

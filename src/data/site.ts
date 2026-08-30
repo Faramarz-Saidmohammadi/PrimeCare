@@ -74,43 +74,43 @@ export const services: Service[] = [
 
 export const doctors: Doctor[] = [
   {
-    slug: "dr-amina-rahman",
-    name: "Dr. Amina Rahman",
-    role: "Lead Dentist",
-    qualification: "DDS, MSc Restorative Dentistry",
-    experience: "14 years",
+    slug: "general-dentistry-team",
+    name: "General Dentistry Team",
+    role: "Preventive and restorative care",
+    qualification: "Clinician details verified by the deploying clinic",
+    experience: "Clinic-provided profile required",
     image: "https://images.pexels.com/photos/31017709/pexels-photo-31017709.jpeg?auto=compress&dpr=1&h=1000&w=900",
-    bio: "Dr. Rahman leads PrimeCare’s clinical team with a focus on comprehensive treatment planning, minimally invasive restorative care, and clear patient communication.",
+    bio: "This role-based profile represents clinicians providing examinations, prevention, restorative treatment, and coordinated treatment planning. A real deployment must replace it with verified staff information.",
     specialties: ["Restorative dentistry", "Smile rehabilitation", "Complex treatment planning"]
   },
   {
-    slug: "dr-daniel-cole",
-    name: "Dr. Daniel Cole",
-    role: "Orthodontist",
-    qualification: "DMD, MClinDent Orthodontics",
-    experience: "11 years",
+    slug: "orthodontic-care-team",
+    name: "Orthodontic Care Team",
+    role: "Alignment and bite care",
+    qualification: "Clinician details verified by the deploying clinic",
+    experience: "Clinic-provided profile required",
     image: "https://images.pexels.com/photos/37458046/pexels-photo-37458046.jpeg?auto=compress&dpr=1&h=1000&w=900",
-    bio: "Dr. Cole provides evidence-based orthodontic care for adolescents and adults, including clear aligners and multidisciplinary bite correction.",
+    bio: "This role-based profile represents clinicians responsible for orthodontic assessment, staged treatment, progress review, and retention planning. A real deployment must use verified staff information.",
     specialties: ["Clear aligners", "Adult orthodontics", "Retention planning"]
   },
   {
-    slug: "dr-sophia-malik",
-    name: "Dr. Sophia Malik",
-    role: "Cosmetic Dentist",
-    qualification: "BDS, PGCert Aesthetic Dentistry",
-    experience: "9 years",
+    slug: "cosmetic-care-team",
+    name: "Cosmetic Care Team",
+    role: "Conservative aesthetic care",
+    qualification: "Clinician details verified by the deploying clinic",
+    experience: "Clinic-provided profile required",
     image: "https://images.pexels.com/photos/37458356/pexels-photo-37458356.jpeg?auto=compress&dpr=1&h=1000&w=900",
-    bio: "Dr. Malik combines conservative cosmetic techniques with detailed smile analysis to create natural results that remain easy to maintain.",
+    bio: "This role-based profile represents clinicians providing cosmetic assessment and conservative treatment planning. A real deployment must replace it with qualified, verified team members.",
     specialties: ["Composite bonding", "Whitening", "Porcelain veneers"]
   },
   {
-    slug: "dr-omar-hayes",
-    name: "Dr. Omar Hayes",
-    role: "Paediatric Dentist",
-    qualification: "DDS, Cert. Paediatric Dentistry",
-    experience: "10 years",
+    slug: "childrens-dentistry-team",
+    name: "Children’s Dentistry Team",
+    role: "Preventive care for children",
+    qualification: "Clinician details verified by the deploying clinic",
+    experience: "Clinic-provided profile required",
     image: "https://images.pexels.com/photos/14235194/pexels-photo-14235194.jpeg?auto=compress&dpr=1&h=1000&w=900",
-    bio: "Dr. Hayes is dedicated to positive early dental experiences, prevention, and practical support for parents and children.",
+    bio: "This role-based profile represents clinicians providing calm, age-appropriate preventive care and practical guidance for children and parents. A real deployment must use verified staff information.",
     specialties: ["Children’s dentistry", "Prevention", "Dental anxiety management"]
   }
 ];
@@ -161,9 +161,9 @@ export const posts: Post[] = [
 ];
 
 export const testimonials: Testimonial[] = [
-  { name: "Dianne Russell", role: "Restorative patient", quote: "The team explained every step clearly and never rushed the appointment. My treatment plan felt practical, transparent, and comfortable from beginning to end.", image: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&dpr=1&h=500&w=500" },
-  { name: "Robert Chen", role: "Orthodontic patient", quote: "The booking process was simple, appointments ran on time, and I could see measurable progress at every review. The result exceeded my expectations.", image: "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&dpr=1&h=500&w=500" },
-  { name: "Maya Thompson", role: "Parent", quote: "My daughter was nervous before her first visit. The staff were patient and calm, and she left smiling instead of feeling afraid.", image: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&dpr=1&h=500&w=500" }
+  { name: "Clear communication", role: "Care standard", quote: "Patients should receive understandable explanations of findings, options, expected outcomes, limitations, and costs before agreeing to treatment.", image: "/images/patient-dianne.svg" },
+  { name: "Respectful care", role: "Care standard", quote: "Appointments should protect privacy, allow time for questions, and adapt communication to the patient’s comfort and clinical needs.", image: "/images/patient-robert.svg" },
+  { name: "Continuity and follow-up", role: "Care standard", quote: "Treatment records, after-care instructions, and follow-up plans should remain clear so patients know what happens next.", image: "/images/patient-maya.svg" }
 ];
 
 export const faqs: Faq[] = [
